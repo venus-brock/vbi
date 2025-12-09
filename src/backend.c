@@ -11,10 +11,10 @@ bool step();
 int64_t stack_pop();
 void stack_push(long value);
 
+const int BLOCK_SIZE = 256;
 int64_t *stack;
 int64_t **stack_ptr;
-int32_t stack_size;
-int32_t *stack_size_ptr;
+int32_t *stack_size;
 char *prog;
 char *out;
 int pc[2] = {0, 0};
@@ -25,8 +25,7 @@ void init_field(char *input, int64_t **ptr, int32_t *size, char *output){
     prog = input;
     stack_ptr = ptr;
     stack = *stack_ptr;
-    stack_size_ptr = size;
-    stack_size = *stack_size_ptr;
+    stack_size = size;
     out = output;
     return;
 }
@@ -164,15 +163,25 @@ bool step(){
 }
 
 long stack_pop(){
-    if(stack_size > 0){
-        stack_size--;
-        return *(stack + stack_size);
+    if(*stack_size > 0){
+        (*stack_size)--;
+        return *(stack + *stack_size);
     }
     return 0;
 }
 
 void stack_push(long value){
-    *(stack + stack_size) = value;
-    stack_size++;
+    if(*stack_size > 0 && *stack_size % BLOCK_SIZE == 0){
+        int64_t *new_stack = (int64_t*)realloc(stack, (*stack_size + BLOCK_SIZE) * sizeof(int64_t));
+        if(new_stack == NULL){
+            fprintf(stderr, "VBI: Memory reallocation failed\n");
+            free(stack);
+            exit(1);
+        }
+        stack = new_stack;
+        *stack_ptr = stack;
+    }
+    *(stack + *stack_size) = value;
+    (*stack_size)++;
     return;
 }

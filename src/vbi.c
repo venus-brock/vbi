@@ -14,6 +14,7 @@ int main(int argc, char **argv){
 
     char prog[25][80];
     FILE *source;
+    const int BLOCK_SIZE = 256;
     int32_t stack_size = 0;
     int32_t *stack_size_ptr = &stack_size;
     int64_t *stack;
@@ -39,7 +40,7 @@ int main(int argc, char **argv){
     }
     fclose(source);
 
-    stack = (int64_t*)malloc(256 * sizeof(int64_t));
+    stack = (int64_t*)malloc(BLOCK_SIZE * sizeof(int64_t));
     if(stack == NULL){
         fprintf(stderr, "VBI: Memory allocation failed.\n");
         exit(1);
@@ -52,6 +53,7 @@ int main(int argc, char **argv){
             printf(output);
             output[0] = '\0';
         }
+        if(*stack_ptr != stack) stack = *stack_ptr;
         fflush(stdout);
         usleep(10000);
     }
