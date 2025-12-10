@@ -27,16 +27,13 @@ int main(int argc, char **argv){
     }
 
     for(int i = 0; i < 25; i++)
-        for(int j = 0; j < 80; j++) prog[i][j] = '\0';
+        for(int j = 0; j < 80; j++) prog[i][j] = ' ';
 
     for(int i = 0; i < 25; i++){
         char tmp[82]; // two greater than the maximum line length to account for
                       // line breaks and null terminators
         if(fgets(tmp, 82, source) == NULL) break;
-        strncpy(prog[i], tmp, 80);
-        // line breaks must be removed, otherwise they may be erroneously pushed
-        // to the stack in string mode
-        if(strlen(prog[i]) < 80) prog[i][strlen(prog[i]) - 1] = '\0';
+        strncpy(prog[i], tmp, strlen(tmp) - 1);
     }
     fclose(source);
 
