@@ -5,28 +5,30 @@
 #include <stdbool.h>
 #include "backend.h"
 
-void init_field(char *input, int64_t **ptr, int32_t *size, char *output);
+void init_field(char *input, int64_t **stk_ptr, int32_t *size, char *out);
 bool step();
 
 int64_t stack_pop();
 void stack_push(long value);
 
 const int BLOCK_SIZE = 256;
+uint32_t alloc = 1;
 int64_t *stack;
 int64_t **stack_ptr;
 int32_t *stack_size;
 char *prog;
-char *out;
+char *output;
 int pc[2] = {0, 0};
 int dir = 0;
 bool string_mode = false;
+bool skip = false;
 
-void init_field(char *input, int64_t **ptr, int32_t *size, char *output){
+void init_field(char *input, int64_t **stk_ptr, int32_t *size, char *out){
     prog = input;
-    stack_ptr = ptr;
+    stack_ptr = stk_ptr;
     stack = *stack_ptr;
     stack_size = size;
-    out = output;
+    output = out;
     return;
 }
 
@@ -50,16 +52,16 @@ bool step(){
             dir = 3;
             break;
         case '?':
-            dir = rand() % 3;
+            dir = rand() % 4;
             break;
         case '"':
             string_mode = true;
             break;
         case '.':
-            sprintf(out, "%li ", stack_pop());
+            sprintf(output, "%li ", stack_pop());
             break;
         case ',':
-            sprintf(out, "%c", stack_pop());
+            sprintf(output, "%c", stack_pop());
             break;
         case '+':
             stack_push(stack_pop() + stack_pop());
@@ -109,21 +111,15 @@ bool step(){
             stack_pop();
             break;
         case '#':
-            switch(dir){
-            case 0: case 1:
-                pc[!dir]++;
-                break;
-            case 2: case 3:
-                pc[!(dir - 2)]--;
-                break;
-            }
+            skip = true;
             break;
         case '@':
             return true;
         case 'g':
             // note that no bound checking is performed here nor in case 'p'.
-            // the original befunge-93 spec does define any particular behaviour for if the selected
-            // coordinates are outside the bounds of the playfield.
+            // the original befunge-93 spec does not define any particular
+            // behaviour for if the selected coordinates are outside the bounds
+            // of the playfield.
             stack_push(*(prog + stack_pop() * 80 + stack_pop()));
             break;
         case 'p':
@@ -133,26 +129,26 @@ bool step(){
             stack_push(getchar());
             break;
         case '&':{
-            int tmp;
-            scanf("%i", &tmp);
+            int64_t tmp;
+            scanf("%li", &tmp);
             stack_push(tmp);
             break;
         }
         default:
             // if the current character is a numeral
-            if(inst > 47 && inst < 58){
-                stack_push(inst - 48);
-            }
+            if(inst > 47 && inst < 58) stack_push(inst - 48);
         }
     }
     switch(dir){
     case 0: case 1:
-        pc[!dir]++;
+        pc[!dir] += skip + 1;
         break;
     case 2: case 3:
-        pc[!(dir - 2)]--;
+        pc[!(dir - 2)] -= skip + 1;
         break;
     }
+
+    skip = false;
 
     if(pc[1] > 79) pc[1] %= 80;
     if(pc[0] > 24) pc[0] %= 25;
@@ -162,7 +158,7 @@ bool step(){
     return false;
 }
 
-long stack_pop(){
+int64_t stack_pop(){
     if(*stack_size > 0){
         (*stack_size)--;
         return *(stack + *stack_size);
@@ -170,11 +166,12 @@ long stack_pop(){
     return 0;
 }
 
-void stack_push(long value){
-    if(*stack_size > 0 && *stack_size % BLOCK_SIZE == 0){
-        int64_t *new_stack = (int64_t*)realloc(stack, (*stack_size + BLOCK_SIZE) * sizeof(int64_t));
+void stack_push(int64_t value){
+    if(*stack_size == alloc * BLOCK_SIZE){
+        alloc++;
+        int64_t *new_stack = (int64_t*)realloc(stack, alloc * BLOCK_SIZE * sizeof(int64_t));
         if(new_stack == NULL){
-            fprintf(stderr, "VBI: Memory reallocation failed\n");
+            fprintf(stderr, "VBI: Memory reallocation failed.\n");
             free(stack);
             exit(1);
         }
