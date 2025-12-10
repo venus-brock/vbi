@@ -7,6 +7,17 @@ instructions are treated as whitespace.
 
 VBI is short for "Venus Befunge-93 Interpreter". Real imaginative, eh?
 
+### Building VBI
+
+Run the following
+
+```shell
+git clone https://github.com/venus-brock/vbi
+cd vbi
+mkdir bin
+make
+```
+
 ### About
 
 VBI was written as a personal project to become more familiar with using C with
