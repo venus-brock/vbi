@@ -17,5 +17,5 @@ Read the full Befunge-93 spec here:
 https://catseye.tc/view/befunge-93/doc/Befunge-93.markdown
 
 todo:
-create a better interface
+create a better interface  
 ETA when I feel like it
