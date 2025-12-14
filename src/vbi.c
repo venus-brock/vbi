@@ -55,6 +55,5 @@ int main(int argc, char **argv){
         fflush(stdout);
     }
 
-    printf("\n");
     return 0;
 }
