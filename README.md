@@ -18,6 +18,11 @@ mkdir bin
 make
 ```
 
+### Running the examples
+
+To run the example programs, first build the project, then run
+`bin/vbi eg/<filename>`
+
 ### About
 
 VBI was written as a personal project to become more familiar with using C with
