@@ -18,3 +18,10 @@ quine I've written in befunge.
 ### quine2.b93
 A significantly shorter and significatly more convoluted quine. Not quite
 perfect as it prints 49 spaces after the program, but shhh don't tell anyone
+
+### unicode.b93
+This program demonstrates that even though the playfield is limited to single-
+byte characters, there's nothing stopping us from printing unicode symbols using
+UTF-8 encoding. It simply prints the "§" character, and though it doesn't work
+on many interpreters, both vbi and the Befunge-93 reference implementation are
+able to correctly print it. Cutting edge stuff.
