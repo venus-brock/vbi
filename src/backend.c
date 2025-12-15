@@ -66,9 +66,11 @@ bool step(){
         case '+':
             stack_push(stack_pop() + stack_pop());
             break;
-        case '-':
-            stack_push(-stack_pop() + stack_pop());
+        case '-':{
+            int64_t tmp = stack_pop();
+            stack_push(-tmp + stack_pop());
             break;
+        }
         case '/':{
             int64_t tmp = stack_pop();
             stack_push(stack_pop() / tmp);
@@ -91,9 +93,11 @@ bool step(){
         case '|':
             dir = (stack_pop() != 0) * 2 + 1;
             break;
-        case '`':
-            stack_push(stack_pop() < stack_pop());
+        case '`':{
+            int64_t tmp = stack_pop();
+            stack_push(tmp < stack_pop());
             break;
+        }
         case ':':{
             int64_t tmp = stack_pop();
             stack_push(tmp);
@@ -115,16 +119,21 @@ bool step(){
             break;
         case '@':
             return true;
-        case 'g':
+        case 'g':{
             // note that no bound checking is performed here nor in case 'p'.
             // the original befunge-93 spec does not define any particular
             // behaviour for if the selected coordinates are outside the bounds
             // of the playfield.
-            stack_push(*(prog + stack_pop() * 80 + stack_pop()));
+            int64_t tmp = stack_pop();
+            stack_push(*(prog + tmp * 80 + stack_pop()));
             break;
-        case 'p':
-            *(prog + stack_pop() * 80 + stack_pop()) = stack_pop();
+        }
+        case 'p':{
+            int64_t tmp1 = stack_pop();
+            int64_t tmp2 = stack_pop();
+            *(prog + tmp1 * 80 + tmp2) = stack_pop();
             break;
+        }
         case '~':
             stack_push(getchar());
             break;
