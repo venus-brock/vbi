@@ -1,28 +1,29 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "backend.h"
 
 void init_field(char *input, int *counter, int64_t **stk_ptr, unsigned int *size, char *out);
 bool step();
 
+void stack_alloc(int dir);
 int64_t stack_pop();
 void stack_push(int64_t value);
-void stack_alloc(int dir);
 
-const int BLOCK_SIZE = 256;
 unsigned int alloc = 0;
+const int BLOCK_SIZE = 256;
+int dir = 0;
+char *output;
+char *prog;
+int *pc;
+bool skip = false;
+bool string_mode = false;
 int64_t *stack;
 int64_t **stack_ptr;
 unsigned int *stack_size;
-char *prog;
-char *output;
-int *pc;
-int dir = 0;
-bool string_mode = false;
-bool skip = false;
 
 void init_field(char *input, int *counter, int64_t **stk_ptr, unsigned int *size, char *out){
     prog = input;
@@ -169,6 +170,21 @@ bool step(){
     return false;
 }
 
+void stack_alloc(int dir){
+    alloc += dir;
+    size_t size = alloc * BLOCK_SIZE * sizeof(int64_t);
+    int64_t *new_stack;
+    if(alloc == 1 && dir == 1) new_stack = (int64_t*)malloc(size);
+    else new_stack = (int64_t*)realloc(stack, size);
+    if(new_stack == NULL){
+        fprintf(stderr, "VBI: Memory (re)allocation failed.\n");
+        free(stack);
+        exit(1);
+    }
+    stack = new_stack;
+    *stack_ptr = stack;
+}
+
 int64_t stack_pop(){
     if(*stack_size > 0){
         (*stack_size)--;
@@ -183,19 +199,4 @@ void stack_push(int64_t value){
     *(stack + *stack_size) = value;
     (*stack_size)++;
     return;
-}
-
-void stack_alloc(int dir){
-    alloc += dir;
-    size_t size = alloc * BLOCK_SIZE * sizeof(int64_t);
-    int64_t *new_stack;
-    if(alloc == 1 && dir == 1) new_stack = (int64_t*)malloc(size);
-    else new_stack = (int64_t*)realloc(stack, size);
-    if(new_stack == NULL){
-        fprintf(stderr, "VBI: Memory (re)allocation failed.\n");
-        free(stack);
-        exit(1);
-    }
-    stack = new_stack;
-    *stack_ptr = stack;
 }

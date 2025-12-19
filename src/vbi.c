@@ -1,8 +1,9 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
+
 #include "backend.h"
 
 int main(int argc, char **argv){
@@ -11,13 +12,13 @@ int main(int argc, char **argv){
         return 0;
     }
 
+    char output[21] = "";
+    int pc[2] = {0, 0};
     char prog[25][80];
     FILE *source;
     int64_t *stack = NULL;
     int64_t **stack_ptr = &stack;
     unsigned int stack_size = 0;
-    int pc[2] = {0, 0};
-    char output[21] = "";
     
     source = fopen(argv[1], "r");
     if(source == NULL){
