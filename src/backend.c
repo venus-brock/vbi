@@ -10,6 +10,7 @@ bool step();
 
 int64_t stack_pop();
 void stack_push(long value);
+void stack_alloc(int dir);
 
 const int BLOCK_SIZE = 256;
 uint32_t alloc = 0;
@@ -170,27 +171,30 @@ bool step(){
 int64_t stack_pop(){
     if(*stack_size > 0){
         (*stack_size)--;
+        if(*stack_size == (alloc - 1) * BLOCK_SIZE && alloc > 1) stack_alloc(-1);
         return *(stack + *stack_size);
     }
     return 0;
 }
 
 void stack_push(int64_t value){
-    if(*stack_size == alloc * BLOCK_SIZE){
-        alloc++;
-        size_t size = alloc * BLOCK_SIZE * sizeof(int64_t);
-        int64_t *new_stack;
-        if(alloc == 1) new_stack = (int64_t*)malloc(size);
-        else new_stack = (int64_t*)realloc(stack, size);
-        if(new_stack == NULL){
-            fprintf(stderr, "VBI: Memory (re)allocation failed.\n");
-            free(stack);
-            exit(1);
-        }
-        stack = new_stack;
-        *stack_ptr = stack;
-    }
+    if(*stack_size == alloc * BLOCK_SIZE) stack_alloc(1);
     *(stack + *stack_size) = value;
     (*stack_size)++;
     return;
+}
+
+void stack_alloc(int dir){
+    alloc += dir;
+    size_t size = alloc * BLOCK_SIZE * sizeof(int64_t);
+    int64_t *new_stack;
+    if(alloc == 1 && dir == 1) new_stack = (int64_t*)malloc(size);
+    else new_stack = (int64_t*)realloc(stack, size);
+    if(new_stack == NULL){
+        fprintf(stderr, "VBI: Memory (re)allocation failed.\n");
+        free(stack);
+        exit(1);
+    }
+    stack = new_stack;
+    *stack_ptr = stack;
 }
