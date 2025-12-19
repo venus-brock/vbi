@@ -13,7 +13,7 @@ int main(int argc, char **argv){
 
     char prog[25][80];
     FILE *source;
-    int64_t *stack;
+    int64_t *stack = NULL;
     int64_t **stack_ptr = &stack;
     unsigned int stack_size = 0;
     unsigned int *stack_size_ptr = &stack_size;
@@ -46,6 +46,6 @@ int main(int argc, char **argv){
         }
         stack = *stack_ptr;
     }
-    free(stack);
+    if(stack != NULL) free(stack);
     return 0;
 }
