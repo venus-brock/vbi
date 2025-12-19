@@ -15,8 +15,8 @@ int main(int argc, char **argv){
     FILE *source;
     int64_t *stack;
     int64_t **stack_ptr = &stack;
-    int32_t stack_size = 0;
-    int32_t *stack_size_ptr = &stack_size;
+    unsigned int stack_size = 0;
+    unsigned int *stack_size_ptr = &stack_size;
     char output[21] = "";
     
     source = fopen(argv[1], "r");

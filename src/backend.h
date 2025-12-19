@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void init_field(char *input, int64_t **ptr, int32_t *size, char *output);
+void init_field(char *input, int64_t **ptr, unsigned int *size, char *output);
 bool step();
 
 #endif

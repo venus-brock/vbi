@@ -5,18 +5,18 @@
 #include <stdbool.h>
 #include "backend.h"
 
-void init_field(char *input, int64_t **stk_ptr, int32_t *size, char *out);
+void init_field(char *input, int64_t **stk_ptr, unsigned int *size, char *out);
 bool step();
 
 int64_t stack_pop();
-void stack_push(long value);
+void stack_push(int64_t value);
 void stack_alloc(int dir);
 
 const int BLOCK_SIZE = 256;
-uint32_t alloc = 0;
+unsigned int alloc = 0;
 int64_t *stack;
 int64_t **stack_ptr;
-int32_t *stack_size;
+unsigned int *stack_size;
 char *prog;
 char *output;
 int pc[2] = {0, 0};
@@ -24,7 +24,7 @@ int dir = 0;
 bool string_mode = false;
 bool skip = false;
 
-void init_field(char *input, int64_t **stk_ptr, int32_t *size, char *out){
+void init_field(char *input, int64_t **stk_ptr, unsigned int *size, char *out){
     prog = input;
     stack_ptr = stk_ptr;
     stack = *stack_ptr;
