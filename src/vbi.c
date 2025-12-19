@@ -44,9 +44,8 @@ int main(int argc, char **argv){
             printf(output);
             output[0] = '\0';
         }
-        if(*stack_ptr != stack) stack = *stack_ptr;
-        fflush(stdout);
+        stack = *stack_ptr;
     }
-
+    free(stack);
     return 0;
 }
