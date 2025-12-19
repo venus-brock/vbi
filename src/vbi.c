@@ -13,7 +13,6 @@ int main(int argc, char **argv){
 
     char prog[25][80];
     FILE *source;
-    const int BLOCK_SIZE = 256;
     int64_t *stack;
     int64_t **stack_ptr = &stack;
     int32_t stack_size = 0;
@@ -36,12 +35,6 @@ int main(int argc, char **argv){
         strncpy(prog[i], tmp, strlen(tmp) - 1);
     }
     fclose(source);
-
-    stack = (int64_t*)malloc(BLOCK_SIZE * sizeof(int64_t));
-    if(stack == NULL){
-        fprintf(stderr, "VBI: Memory allocation failed.\n");
-        return 1;
-    }
 
     init_field(&(prog[0][0]), stack_ptr, stack_size_ptr, output);
     srand(time(0));

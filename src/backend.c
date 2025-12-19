@@ -12,7 +12,7 @@ int64_t stack_pop();
 void stack_push(long value);
 
 const int BLOCK_SIZE = 256;
-uint32_t alloc = 1;
+uint32_t alloc = 0;
 int64_t *stack;
 int64_t **stack_ptr;
 int32_t *stack_size;
@@ -178,9 +178,12 @@ int64_t stack_pop(){
 void stack_push(int64_t value){
     if(*stack_size == alloc * BLOCK_SIZE){
         alloc++;
-        int64_t *new_stack = (int64_t*)realloc(stack, alloc * BLOCK_SIZE * sizeof(int64_t));
+        size_t size = alloc * BLOCK_SIZE * sizeof(int64_t);
+        int64_t *new_stack;
+        if(alloc == 1) new_stack = (int64_t*)malloc(size);
+        else new_stack = (int64_t*)realloc(stack, size);
         if(new_stack == NULL){
-            fprintf(stderr, "VBI: Memory reallocation failed.\n");
+            fprintf(stderr, "VBI: Memory (re)allocation failed.\n");
             free(stack);
             exit(1);
         }
