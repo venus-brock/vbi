@@ -16,7 +16,7 @@ int main(int argc, char **argv){
     int64_t *stack = NULL;
     int64_t **stack_ptr = &stack;
     unsigned int stack_size = 0;
-    unsigned int *stack_size_ptr = &stack_size;
+    int pc[2] = {0, 0};
     char output[21] = "";
     
     source = fopen(argv[1], "r");
@@ -36,7 +36,7 @@ int main(int argc, char **argv){
     }
     fclose(source);
 
-    init_field(&(prog[0][0]), stack_ptr, stack_size_ptr, output);
+    init_field(&(prog[0][0]), pc, stack_ptr, &stack_size, output);
     srand(time(0));
 
     while(!step()){

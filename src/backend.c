@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "backend.h"
 
-void init_field(char *input, int64_t **stk_ptr, unsigned int *size, char *out);
+void init_field(char *input, int *counter, int64_t **stk_ptr, unsigned int *size, char *out);
 bool step();
 
 int64_t stack_pop();
@@ -19,13 +19,14 @@ int64_t **stack_ptr;
 unsigned int *stack_size;
 char *prog;
 char *output;
-int pc[2] = {0, 0};
+int *pc;
 int dir = 0;
 bool string_mode = false;
 bool skip = false;
 
-void init_field(char *input, int64_t **stk_ptr, unsigned int *size, char *out){
+void init_field(char *input, int *counter, int64_t **stk_ptr, unsigned int *size, char *out){
     prog = input;
+    pc = counter;
     stack_ptr = stk_ptr;
     stack = *stack_ptr;
     stack_size = size;
@@ -34,7 +35,7 @@ void init_field(char *input, int64_t **stk_ptr, unsigned int *size, char *out){
 }
 
 bool step(){
-    char inst = *(prog + pc[0] * 80 + pc[1]);
+    char inst = *(prog + *pc * 80 + *(pc + 1));
     if(string_mode){
         if(inst == '"') string_mode = false;
         else stack_push(inst);
@@ -160,10 +161,10 @@ bool step(){
 
     skip = false;
 
-    if(pc[1] > 79) pc[1] %= 80;
-    if(pc[0] > 24) pc[0] %= 25;
-    if(pc[1] < 0) pc[1] += 80;
-    if(pc[0] < 0) pc[0] += 25;
+    if(*(pc + 1) > 79) *(pc + 1) %= 80;
+    if(*pc > 24) *pc %= 25;
+    if(*(pc + 1) < 0) *(pc + 1) += 80;
+    if(*pc < 0) *pc += 25;
 
     return false;
 }
