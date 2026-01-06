@@ -16,7 +16,7 @@ A program which produces an output identical to its source. This is the first
 quine I've written in befunge.
 
 ### quine2.b93
-A significantly shorter and significatly more convoluted quine. Not quite
+A significantly shorter and significantly more convoluted quine. Not quite
 perfect as it prints 49 spaces after the program, but shhh don't tell anyone
 
 ### unicode.b93
