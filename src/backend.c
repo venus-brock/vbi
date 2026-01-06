@@ -162,8 +162,8 @@ bool step(){
 
     skip = false;
 
-    if(*(pc + 1) > 79) *(pc + 1) %= 80;
-    if(*pc > 24) *pc %= 25;
+    if(*(pc + 1) > 79) *(pc + 1) -= 80;
+    if(*pc > 24) *pc -= 25;
     if(*(pc + 1) < 0) *(pc + 1) += 80;
     if(*pc < 0) *pc += 25;
 
@@ -181,8 +181,7 @@ void stack_alloc(int dir){
         free(stack);
         exit(1);
     }
-    stack = new_stack;
-    *stack_ptr = stack;
+    *stack_ptr = stack = new_stack;
 }
 
 int64_t stack_pop(){
