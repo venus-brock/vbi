@@ -170,11 +170,11 @@ bool step(){
     return false;
 }
 
-void stack_alloc(int dir){
-    alloc += dir;
+void stack_alloc(int alloc_dir){
+    alloc += alloc_dir;
     size_t size = alloc * BLOCK_SIZE * sizeof(int64_t);
     int64_t *new_stack;
-    if(alloc == 1 && dir == 1) new_stack = (int64_t*)malloc(size);
+    if(alloc == 1 && alloc_dir == 1) new_stack = (int64_t*)malloc(size);
     else new_stack = (int64_t*)realloc(stack, size);
     if(new_stack == NULL){
         fprintf(stderr, "VBI: Memory (re)allocation failed.\n");
