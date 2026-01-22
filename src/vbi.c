@@ -5,10 +5,17 @@
 #include <time.h>
 
 #include "backend.h"
+#include "vbi_version.h"
 
 int main(int argc, char **argv){
     if(argc != 2){
         printf("USAGE: vbi <path to .b93 source file>\n");
+        return 0;
+    }
+
+    if(!strncmp(argv[1], "--version", 10)){
+        printf("VBI " VBI_VERSION "\n");
+        printf("Copyright (c) " VBI_COPYRIGHT_YEARS " Venus Brock - venus@brock-v.dev\n");
         return 0;
     }
 
