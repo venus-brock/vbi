@@ -15,7 +15,8 @@ int main(int argc, char **argv){
 
     if(!strncmp(argv[1], "--version", 10)){
         printf("VBI " VBI_VERSION "\n");
-        printf("Copyright (c) " VBI_COPYRIGHT_YEARS " Venus Brock - venus@brock-v.dev\n");
+        printf("Copyright (c) " VBI_COPYRIGHT_YEARS
+            " Venus Brock - venus@brock-v.dev\n");
         return 0;
     }
 
@@ -37,8 +38,8 @@ int main(int argc, char **argv){
         for(int j = 0; j < 80; j++) prog[i][j] = ' ';
 
     for(int i = 0; i < 25; i++){
-        char tmp[82]; // two greater than the maximum line length to account for
-                      // line breaks and null terminators
+        char tmp[82]; // two greater than the maximum line length to account
+                      // for line breaks and null terminators
         if(fgets(tmp, 82, source) == NULL) break;
         strncpy(prog[i], tmp, strlen(tmp) - 1);
     }

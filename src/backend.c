@@ -6,7 +6,8 @@
 
 #include "backend.h"
 
-void init_field(char *input, int *counter, int64_t **stk_ptr, unsigned int *size, char *out);
+void init_field(char *input, int *counter, int64_t **stk_ptr,
+    unsigned int *size, char *out);
 bool step();
 
 void stack_alloc(int dir);
@@ -25,7 +26,8 @@ int64_t *stack;
 int64_t **stack_ptr;
 unsigned int *stack_size;
 
-void init_field(char *input, int *counter, int64_t **stk_ptr, unsigned int *size, char *out){
+void init_field(char *input, int *counter, int64_t **stk_ptr,
+    unsigned int *size, char *out){
     prog = input;
     pc = counter;
     stack_ptr = stk_ptr;
@@ -187,7 +189,8 @@ void stack_alloc(int alloc_dir){
 int64_t stack_pop(){
     if(*stack_size > 0){
         (*stack_size)--;
-        if(*stack_size == (alloc - 1) * BLOCK_SIZE && alloc > 1) stack_alloc(-1);
+        if(*stack_size == (alloc - 1) * BLOCK_SIZE && alloc > 1)
+            stack_alloc(-1);
         return *(stack + *stack_size);
     }
     return 0;
