@@ -14,9 +14,10 @@ Run the following
 ```shell
 git clone https://github.com/venus-brock/vbi
 cd vbi
-mkdir bin
 make
 ```
+
+The executable will be placed at bin/vbi.
 
 ### Running the examples
 
