@@ -28,22 +28,32 @@ int main(int argc, char **argv){
     int64_t **stack_ptr = &stack;
     unsigned int stack_size = 0;
     
-    source = fopen(argv[1], "r");
-    if(source == NULL){
-        fprintf(stderr, "VBI: Failed opening file \"%s\"\n", argv[1]);
-        return 1;
-    }
+    if(strncmp(argv[1], "-i", 3)){
+        source = fopen(argv[1], "r");
+        if(source == NULL){
+            fprintf(stderr, "VBI: Failed opening file \"%s\"\n", argv[1]);
+            return 1;
+        }
+    } else source = stdin;
 
     for(int i = 0; i < 25; i++)
         for(int j = 0; j < 80; j++) prog[i][j] = ' ';
 
     for(int i = 0; i < 25; i++){
-        char tmp[82]; // two greater than the maximum line length to account
-                      // for line breaks and null terminators
-        if(fgets(tmp, 82, source) == NULL) break;
-        strncpy(prog[i], tmp, strlen(tmp) - 1);
+        bool file_end = false;
+        int j = 0;
+        for(j = 0; j < 80; j++){
+            prog[i][j] = fgetc(source);
+            if(prog[i][j] == EOF) file_end = true;
+            if(prog[i][j] == EOF || prog[i][j] == '\n'){
+                prog[i][j] = ' ';
+                break;
+            }
+        }
+        if(file_end) break;
     }
-    fclose(source);
+    
+    if(source != stdin) fclose(source);
 
     init_field(&(prog[0][0]), pc, stack_ptr, &stack_size, output);
     srand(time(0));

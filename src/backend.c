@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "backend.h"
 
@@ -140,11 +141,14 @@ bool step(){
             break;
         }
         case '~':
-            stack_push(getchar());
+            if(isatty(fileno(stdin))) stack_push(getchar());
+            else stack_push(' ');
             break;
         case '&':{
-            int64_t tmp;
-            scanf("%li", &tmp);
+            int64_t tmp = 0;
+            if(isatty(fileno(stdin))){
+                scanf("%li", &tmp);
+            }
             stack_push(tmp);
             break;
         }
