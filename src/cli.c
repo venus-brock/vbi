@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -74,6 +74,6 @@ int main(int argc, char **argv){
 
 int64_t cli_get_int(void){
     int64_t tmp;
-    scanf("%li", &tmp);
+    scanf("%" PRId64, &tmp);
     return tmp;
 }

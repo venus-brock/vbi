@@ -1,5 +1,5 @@
+#include <inttypes.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,7 +73,7 @@ bool step(){
             string_mode = true;
             break;
         case '.':
-            sprintf(output, "%li ", stack_pop());
+            sprintf(output, "%" PRId64 " ", stack_pop());
             break;
         case ',':
             sprintf(output, "%c", stack_pop());
