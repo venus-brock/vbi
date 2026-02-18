@@ -1,3 +1,3 @@
-bin/vbi: src/cli.c src/vbi.h src/backend.c
+bin/vbi: src/cli.c src/vbi.h src/vbi.c
 	mkdir bin -p
-	cc -o bin/vbi src/cli.c src/backend.c
+	cc -o bin/vbi src/cli.c src/vbi.c
