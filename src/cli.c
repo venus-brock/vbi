@@ -4,8 +4,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "backend.h"
+#include "vbi.h"
 #include "vbi_version.h"
+
+int64_t cli_get_int(void);
 
 int main(int argc, char **argv){
     if(argc != 2){
@@ -56,6 +58,7 @@ int main(int argc, char **argv){
     if(source != stdin) fclose(source);
 
     init_field(&(prog[0][0]), pc, stack_ptr, &stack_size, output);
+    set_inputs((char(*)(void))getchar, cli_get_int);
     srand(time(0));
 
     while(!step()){
@@ -67,4 +70,10 @@ int main(int argc, char **argv){
     }
     if(stack != NULL) free(stack);
     return 0;
+}
+
+int64_t cli_get_int(void){
+    int64_t tmp;
+    scanf("%li", &tmp);
+    return tmp;
 }

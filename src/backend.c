@@ -5,15 +5,19 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "backend.h"
+#include "vbi.h"
 
 void init_field(char *input, int *counter, int64_t **stk_ptr,
     unsigned int *size, char *out);
+void set_inputs(char (*char_in)(void), int64_t (*int_in)(void));
 bool step();
 
 void stack_alloc(int dir);
 int64_t stack_pop();
 void stack_push(int64_t value);
+
+char (*char_input)(void);
+int64_t (*int_input)(void);
 
 unsigned int alloc = 0;
 const int BLOCK_SIZE = 256;
@@ -36,6 +40,11 @@ void init_field(char *input, int *counter, int64_t **stk_ptr,
     stack_size = size;
     output = out;
     return;
+}
+
+void set_inputs(char (*char_in)(void), int64_t (*int_in)(void)){
+    char_input = char_in;
+    int_input = int_in;
 }
 
 bool step(){
@@ -141,15 +150,10 @@ bool step(){
             break;
         }
         case '~':
-            if(isatty(fileno(stdin))) stack_push(getchar());
-            else stack_push(' ');
+            stack_push((*char_input)());
             break;
         case '&':{
-            int64_t tmp = 0;
-            if(isatty(fileno(stdin))){
-                scanf("%li", &tmp);
-            }
-            stack_push(tmp);
+            stack_push((*int_input)());
             break;
         }
         default:
