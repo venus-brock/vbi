@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 
     char output[21] = "";
     int pc[2] = {0, 0};
-    char prog[25][80];
+    char prog[PROG_H][PROG_W];
     FILE *source;
     int64_t *stack = NULL;
     int64_t **stack_ptr = &stack;
@@ -38,13 +38,13 @@ int main(int argc, char **argv){
         }
     } else source = stdin;
 
-    for(int i = 0; i < 25; i++)
-        for(int j = 0; j < 80; j++) prog[i][j] = ' ';
+    for(int i = 0; i < PROG_H; i++)
+        for(int j = 0; j < PROG_W; j++) prog[i][j] = ' ';
 
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < PROG_H; i++){
         bool file_end = false;
         int j = 0;
-        for(j = 0; j < 80; j++){
+        for(j = 0; j < PROG_W; j++){
             prog[i][j] = fgetc(source);
             if(prog[i][j] == EOF) file_end = true;
             if(prog[i][j] == EOF || prog[i][j] == '\n'){

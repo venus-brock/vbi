@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 #include "vbi.h"
 
@@ -20,7 +18,6 @@ char (*char_input)(void);
 int64_t (*int_input)(void);
 
 unsigned int alloc = 0;
-const int BLOCK_SIZE = 256;
 int dir = 0;
 char *output;
 char *prog;
@@ -48,7 +45,7 @@ void set_inputs(char (*char_in)(void), int64_t (*int_in)(void)){
 }
 
 bool step(){
-    char inst = *(prog + *pc * 80 + *(pc + 1));
+    char inst = *(prog + *pc * PROG_W + *(pc + 1));
     if(string_mode){
         if(inst == '"') string_mode = false;
         else stack_push(inst);
@@ -140,13 +137,13 @@ bool step(){
             // behaviour for if the selected coordinates are outside the bounds
             // of the playfield.
             int64_t tmp = stack_pop();
-            stack_push(*(prog + tmp * 80 + stack_pop()));
+            stack_push(*(prog + tmp * PROG_W + stack_pop()));
             break;
         }
         case 'p':{
             int64_t tmp1 = stack_pop();
             int64_t tmp2 = stack_pop();
-            *(prog + tmp1 * 80 + tmp2) = stack_pop();
+            *(prog + tmp1 * PROG_W + tmp2) = stack_pop();
             break;
         }
         case '~':
@@ -157,8 +154,7 @@ bool step(){
             break;
         }
         default:
-            // if the current character is a numeral
-            if(inst > 47 && inst < 58) stack_push(inst - 48);
+            if(inst >= '0' && inst <= '9') stack_push(inst - '0');
         }
     }
     switch(dir){
@@ -172,10 +168,10 @@ bool step(){
 
     skip = false;
 
-    if(*(pc + 1) > 79) *(pc + 1) -= 80;
-    if(*pc > 24) *pc -= 25;
-    if(*(pc + 1) < 0) *(pc + 1) += 80;
-    if(*pc < 0) *pc += 25;
+    if(*(pc + 1) >= PROG_W) *(pc + 1) -= PROG_W;
+    if(*pc >= PROG_H) *pc -= PROG_H;
+    if(*(pc + 1) < 0) *(pc + 1) += PROG_W;
+    if(*pc < 0) *pc += PROG_H;
 
     return false;
 }
