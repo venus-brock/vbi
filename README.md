@@ -1,9 +1,10 @@
 ## VBI
 
-VBI is an interpreter for Befunge-93 which aims to be as closely compliant to
-the language specification as possible. No Befunge-98-specific instructions are
-supported. Unlike the reference implementation of Befunge-93, unsupported
-instructions are treated as whitespace.
+VBI is an interpreter for Befunge-93 which is "mostly" spec compliant. Unlike
+the reference implementation of Befunge-93, the stack int size is 64 bit
+regardless of platform. Aside from this distinction, if you are aware of any
+program which behaves differently on VBI from how it does on the reference
+interpreter, I'd love to hear about it. Shoot me an email at venus@brock-v.dev
 
 VBI is short for "Venus Befunge-93 Interpreter". Real imaginative, eh?
 
@@ -26,9 +27,9 @@ To run the example programs, first build the project, then run
 
 ### About
 
-VBI was written as a personal project to become more familiar with using C with
-the standard library and using C-style pointers. Any issues will likely be
-ignored except those related to compliance with the language specification.
+VBI was originally written as a practice project for programming in C, but in
+the process of creating it I have become enamored with the Befunge-93 language.
+As a consequence, I now have more related projects planned. What a nightmare.
 
 Read the full Befunge-93 spec here:
 https://catseye.tc/view/befunge-93/doc/Befunge-93.markdown
